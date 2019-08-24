@@ -1,35 +1,21 @@
-const http = require('http');
+var express = require('express');
+var app = express();
 
-const hostname = '127.0.0.1';
-const port = 3000;
+//var request = require('request');
+var request = require('sync-request');
 
+app.get('/', function (req, res) {
+	
+	//console.log(obtenerPilot());
+	var respuesta1 = request('GET', 'http://localhost:3001/');
+	//console.log(respuesta.getBody('utf8'));
+	var respuesta2 = request('GET', 'http://localhost:3002/');
 
-var request = require('request');
-var options = {
-	url : 'http://localhost:3001/',
-	method : 'GET'
-}
-
-
-const server = http.createServer((req, res) => {
-
-	request(options, function (error, response, body) {
-	    //if (!error && response.statusCode == 200) {
-	    //    console.log('La respuesta fue:' + body);
-	    //}
-	    console.log('error:', error); // Print the error if one occurred
-  		console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-		console.log('body:', body); // Print the HTML for the Google homepage.
-	});
-
-    res.statusCode = 200;
-	res.setHeader('Content-Type', 'text/plain');
-	res.end('Este es el archivo del cliente\n');
-
-
+	var datos = "DATOS DEL PILOTO ---> " + respuesta1.getBody('utf8')
+				+ "<BR>DATOS DE LA POSICIÓN --->" + respuesta2.getBody('utf8');
+	res.send(datos);
 });
 
-server.listen(port, hostname, () => {
-  console.log(`Micro servicio del cliente corriendo en http://${hostname}:${port}/`);
+app.listen(3000, function () {
+  console.log('Micro servicio del Cliente corriendo en http://localhost:3000/');
 });
-

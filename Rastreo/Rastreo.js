@@ -1,14 +1,22 @@
-const http = require('http');
+var express = require('express');
+var app = express();
 
-const hostname = '127.0.0.1';
-const port = 3002;
-
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Este es el archivo del rastreo\n');
+app.get('/', function (req, res) {
+	res.send(obtenerPosicion());
+	//res.send('Este es el archivo de Rastreo');
 });
 
-server.listen(port, hostname, () => {
-  console.log(`Micro servicio del rastreo corriendo en http://${hostname}:${port}/`);
+app.listen(3002, function () {
+  console.log('Micro servicio del Rastreo corriendo en http://localhost:3002/');
 });
+
+function obtenerPosicion(){
+	var minimo = -5248;
+	var maximo = 5248;
+
+	return {longitud:aleatorio(minimo,maximo), latitud:aleatorio(minimo,maximo)};
+}
+
+function aleatorio(minimo,maximo){
+	return Math.floor(Math.random() * ((maximo+1)-minimo)+minimo);
+}
